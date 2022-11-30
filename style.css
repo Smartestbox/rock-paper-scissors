@@ -1,0 +1,50 @@
+html {
+    box-sizing: border-box;
+    height: 100vh;
+    background: url('./images/rock-paper-scissors.jpg') no-repeat center center fixed;
+    background-size: 100vw;
+    color: rgb(196, 187, 205);
+    font-size: 4em;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: hsl(0,0%,0%, .4)
+}
+
+button {
+    width: 150px;
+    height: 70px;
+    font-size: 0.5em;
+    color: rgb(196, 187, 205);
+    background-color: black;
+    border-radius: 5px;
+    border-color: white;
+}
+
+button:hover {
+    color: black;
+    background-color: rgb(196, 187, 205);
+    border-color: black;
+    cursor: pointer;
+}
+
+.reset {
+    width: 200px;
+    height: 100px;
+}

@@ -1,101 +1,85 @@
+const roundResult = document.querySelector('.round-result');
+const playerScore = document.querySelector('.player-score');
+const computerScore = document.querySelector('.computer-score');
+const buttons = document.querySelector('.player-choices');
+const resetBtn = document.querySelector('.reset')
+
+resetBtn.addEventListener('click', () => {
+	playerWins = 0;
+	computerWins = 0;
+	playerScore.textContent = 0;
+	computerScore.textContent = 0;
+	roundResult.textContent = 'Who will win?';
+	buttons.addEventListener('click', getRoundResult);
+})
+
 let playerSelection = "";
 let computerSelection = "";
-let playerScore;
-let computerScore;
-let roundWinner;
+let playerWins = 0;
+let computerWins = 0;
+const variants = ["rock", "paper", "scissors"];
 
-function getComputerChoice() {
-	const variants = ["rock", "paper", "scissors"];
-	const randomCompChoice = Math.floor(Math.random() * 3);
-	return variants[randomCompChoice];
+const getPlayerChoice = function(event) {
+	switch(true) {
+		case event.target.className === 'rock-btn':
+			playerSelection = variants[0];
+			break;
+		case event.target.className === 'paper-btn':
+			playerSelection = variants[1];
+			break;
+		case event.target.className === 'scissors-btn':
+			playerSelection = variants[2];
+			break;
+	};
+};
+
+function getRoundResult(event) {
+	getPlayerChoice(event);
+	
+	playRound(playerSelection, computerSelection);
+
+	if(playerWins === 5 || computerWins === 5) {
+		if(playerWins > computerWins) {
+			roundResult.textContent = 'The winner is player'
+		}
+		if(computerWins > playerWins) {
+			roundResult.textContent = 'The winner is computer'
+		}
+		buttons.removeEventListener('click', getRoundResult)
+	}
 }
 
+buttons.addEventListener('click', getRoundResult);
+
+function getComputerChoice() {
+	const randomCompChoice = Math.floor(Math.random() * 3);
+	return variants[randomCompChoice];
+};
+
 function playRound(playerSelection, computerSelection) {
-	playerSelection = prompt("Rock, paper or scissors?", "");
+
 	computerSelection = getComputerChoice();
 
 	switch (true) {
 		case playerSelection.toLowerCase() === computerSelection:
-			roundWinner = "tie";
+			roundResult.textContent = "In this round - tie";
 			break;
-		case playerSelection.toLowerCase() === "rock" &&
-			computerSelection === "paper":
-			roundWinner = "computer";
+		case (playerSelection.toLowerCase() === "rock" &&
+			computerSelection === "paper") || (playerSelection.toLowerCase() === "paper" &&
+			computerSelection === "scissors") || (playerSelection.toLowerCase() === "scissors" &&
+			computerSelection === "rock"):
+			roundResult.textContent = "Computer wins this round";
+			computerWins += 1;
+			computerScore.textContent = computerWins;
 			break;
-		case playerSelection.toLowerCase() === "rock" &&
-			computerSelection === "scissors":
-			roundWinner = "player";
+		case (playerSelection.toLowerCase() === "rock" &&
+			computerSelection === "scissors") || (playerSelection.toLowerCase() === "paper" &&
+			computerSelection === "rock") || (playerSelection.toLowerCase() === "scissors" &&
+			computerSelection === "paper"):
+			roundResult.textContent = "Player wins this round";
+			playerWins += 1;
+			playerScore.textContent = playerWins;
 			break;
-		case playerSelection.toLowerCase() === "paper" &&
-			computerSelection === "rock":
-			roundWinner = "player";
-			break;
-		case playerSelection.toLowerCase() === "paper" &&
-			computerSelection === "scissors":
-			roundWinner = "computer";
-			break;
-		case playerSelection.toLowerCase() === "scissors" &&
-			computerSelection === "rock":
-			roundWinner = "computer";
-            break;
-		case playerSelection.toLowerCase() === "scissors" &&
-			computerSelection === "paper":
-			roundWinner = "player";
-            break;
-	}
-}
+	};
+};
 
-function game() {
-	playerScore = 0;
-	computerScore = 0;
-
-	for (let i = 1; i < 6; i++) {
-		playRound(playerSelection, computerSelection);
-
-		switch (true) {
-			case roundWinner === "computer":
-				computerScore += 1;
-				break;
-			case roundWinner === "player":
-				playerScore += 1;
-				break;
-		}
-
-		switch (true) {
-			case playerScore > computerScore:
-				console.log(
-					`Your score is ${playerScore} and computer score is ${computerScore} - You are leader`
-				);
-				break;
-			case computerScore > playerScore:
-				console.log(
-					`Your score is ${playerScore} and computer score is ${computerScore} - Computer is leader`
-				);
-				break;
-			case playerScore === computerScore:
-				console.log(
-					`Your score is ${playerScore} and computer score is ${computerScore} - It\'s a tie`
-				);
-				break;
-		}
-	}
-
-	switch (true) {
-		case playerScore > computerScore:
-			console.log(
-				`Your score is ${playerScore} and computer score is ${computerScore} - Congratulations, you win the game!`
-			);
-			break;
-		case playerScore < computerScore:
-			console.log(
-				`Your score is ${playerScore} and computer score is ${computerScore} - Computer win this the game!`
-			);
-			break;
-		case playerScore === computerScore:
-			console.log(
-				`Your score is ${playerScore} and computer score is ${computerScore} - Wow, it\'s a tie! Rematch?`
-			);
-	}
-}
-
-game();
